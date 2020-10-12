@@ -72,6 +72,7 @@ std::vector<int>  PathSelector::findPointsAlongSegments(const shape_msgs::Mesh& 
 							const PathSelectorParameters& params)
 {
 
+  ROS_ERROR_STREAM("INSIDE PATH_SELECTOR!");
   // Check size of selection points vector
   if (points.size() < 2)
   {

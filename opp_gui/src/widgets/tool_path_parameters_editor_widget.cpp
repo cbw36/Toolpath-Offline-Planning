@@ -69,6 +69,10 @@ ToolPathParametersEditorWidget::ToolPathParametersEditorWidget(ros::NodeHandle& 
           this,
           &ToolPathParametersEditorWidget::onPolylinePathGen);
   connect(this,
+    &ToolPathParametersEditorWidget::polylinePath,
+          this,
+          &ToolPathParametersEditorWidget::onPolylinePath);
+  connect(this,
 	  &ToolPathParametersEditorWidget::QWarningBox,
           this,
           &ToolPathParametersEditorWidget::onQWarningBox);
@@ -178,6 +182,7 @@ void ToolPathParametersEditorWidget::generateToolPath()
 
 void ToolPathParametersEditorWidget::onPolylinePath(const std::vector<int> pnt_indices)
 {
+  ROS_INFO("INSIDE Tool_path_parameters_editor_widget.cpp ToolPathParametersEditorWidget::onPolylinePath");
   if (!mesh_)
   {
     emit QWarningBox("Mesh has not yet been specified");
