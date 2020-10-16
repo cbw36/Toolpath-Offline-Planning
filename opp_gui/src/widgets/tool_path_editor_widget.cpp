@@ -163,7 +163,7 @@ void ToolPathEditorWidget::onRemovePressed()
     }
     else
     {
-      
+
       ROS_ERROR_STREAM(__func__ << "Failed to find part '" << key << "' in map");
     }
 
@@ -262,7 +262,9 @@ void ToolPathEditorWidget::onPolylinePath(const std::vector<int> pnt_indices)
 {
   // TODO: First find shortest path on surface between each segments same as with pathGen
   // TODO TODO TODO TODO
-  std::string msg("new polyline path in ToolPathEditor has %ld pnts", pnt_indices.size());
+  ROS_ERROR_STREAM("new polyline path in ToolPathEditor has " << pnt_indices.size() << " points");
+  std::string msg = "new polyline path in ToolPathEditor has " +  std::to_string(pnt_indices.size()) + " points";
+  std::string msg("new polyline path in ToolPathEditor has %ld pnts", pnt_indices.size());  QMessageBox::warning(this, "Tool Path Editor Widget Error (POLYLINE PATH NOT YET IMPLEMENTED)", msg.c_str());
   emit QWarningBox(msg.c_str());
 }
 void ToolPathEditorWidget::onPolylinePathReset(const std::vector<int> pnt_indices)
@@ -273,6 +275,7 @@ void ToolPathEditorWidget::onPolylinePathReset(const std::vector<int> pnt_indice
 
 void ToolPathEditorWidget::onPolylinePathGen(const std::vector<int> pnt_indices)
 {
+  ROS_WARN("INSIDE ToolPathEditorWidget::onPolylinePathGen");
   emit(editor_->polylinePathGen(pnt_indices));
 }
 
