@@ -275,7 +275,7 @@ void ToolPathEditorWidget::onPolylinePathReset(const std::vector<int> pnt_indice
 
 void ToolPathEditorWidget::onPolylinePathGen(const std::vector<int> pnt_indices)
 {
-  ROS_WARN("INSIDE ToolPathEditorWidget::onPolylinePathGen");
+  ROS_ERROR("INSIDE ToolPathEditorWidget::onPolylinePathGen");
   emit(editor_->polylinePathGen(pnt_indices));
 }
 

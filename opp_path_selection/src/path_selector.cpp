@@ -72,7 +72,7 @@ std::vector<int>  PathSelector::findPointsAlongSegments(const shape_msgs::Mesh& 
 							const PathSelectorParameters& params)
 {
 
-  ROS_ERROR_STREAM("INSIDE PATH_SELECTOR!");
+  ROS_ERROR_STREAM("INSIDE PATH_SELECTOR for draw a path manually!");
   // Check size of selection points vector
   if (points.size() < 2)
   {
@@ -171,6 +171,8 @@ std::vector<int>  PathSelector::findPointsAlongSegments(const pcl::PointCloud<pc
 							  const std::vector<Eigen::Vector3d>& points,
 							  const PathSelectorParameters& params)
 {
+  ROS_ERROR_STREAM("INSIDE PATH_SELECTOR for generate toolpath!");
+
   // Check size of selection points vector
   if (points.size() < 2)
   {

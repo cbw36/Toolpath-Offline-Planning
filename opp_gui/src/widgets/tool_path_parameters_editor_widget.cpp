@@ -149,6 +149,7 @@ bool ToolPathParametersEditorWidget::getToolPath(opp_msgs::ToolPath& tool_path) 
 
 void ToolPathParametersEditorWidget::generateToolPath()
 {
+  ROS_ERROR("INSIDE GENERATE TOOL PATH");
   if (!client_.isServerConnected())
   {
     std::string message = "Action server on '" + GENERATE_TOOLPATHS_ACTION + "' is not connected";
@@ -182,7 +183,19 @@ void ToolPathParametersEditorWidget::generateToolPath()
 
 void ToolPathParametersEditorWidget::onPolylinePath(const std::vector<int> pnt_indices)
 {
-  ROS_INFO("INSIDE Tool_path_parameters_editor_widget.cpp ToolPathParametersEditorWidget::onPolylinePath");
+  ROS_ERROR("INSIDE ToolPathParametersEditorWidget::onPolylinePath");
+  if (!mesh_)
+  {
+    emit QWarningBox("Mesh has not yet been specified");
+    return;
+  }
+
+}
+
+/*
+void ToolPathParametersEditorWidget::onPolylinePath(const std::vector<int> pnt_indices)
+{
+  ROS_ERROR("INSIDE ToolPathParametersEditorWidget::onPolylinePath");
   if (!mesh_)
   {
     emit QWarningBox("Mesh has not yet been specified");
@@ -217,10 +230,11 @@ void ToolPathParametersEditorWidget::onPolylinePath(const std::vector<int> pnt_i
   progress_dialog_->setValue(progress_dialog_->minimum());
   progress_dialog_->show();
 }
-
+*/
 
 void ToolPathParametersEditorWidget::onPolylinePathGen(const std::vector<int> pnt_indices)
 {
+  ROS_ERROR("INSIDE ToolPathParametersEditorWidget::onPolylinePathGen");
   // TODO call heat method server with mesh and pnt_indices to generate a new set of paths.
   if (!heat_client_.isServerConnected())
   {
@@ -264,6 +278,7 @@ void ToolPathParametersEditorWidget::onGenerateToolPathsComplete(
     const actionlib::SimpleClientGoalState& state,
     const noether_msgs::GenerateToolPathsResultConstPtr& res)
 {
+  ROS_ERROR("INSIDE ToolPathParametersEditorWidget::onGenerateToolPathsComplete");
   for (int i = progress_dialog_->minimum(); i < progress_dialog_->maximum(); ++i)
   {
     progress_dialog_->setValue(i);
@@ -327,6 +342,7 @@ void ToolPathParametersEditorWidget::onGenerateHeatToolPathsComplete(
     const actionlib::SimpleClientGoalState& state,
     const heat_msgs::GenerateHeatToolPathsResultConstPtr& res)
 {
+  ROS_ERROR("INSIDE ToolPathParametersEditorWidget::onGenerateHeatToolPathsComplete");
   for (int i = progress_dialog_->minimum(); i < progress_dialog_->maximum(); ++i)
   {
     progress_dialog_->setValue(i);
