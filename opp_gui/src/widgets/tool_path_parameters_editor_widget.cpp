@@ -188,29 +188,26 @@ void ToolPathParametersEditorWidget::generateToolPath()
 
 void ToolPathParametersEditorWidget::onPolylinePath(const std::vector<int> pnt_indices)
 {
-  ROS_WARN("ToolPathParametersEditorWidget::onPolylinePath");
   if (!mesh_)
   {
     emit QWarningBox("Mesh has not yet been specified");
     return;
   }
-  ROS_ERROR_STREAM("onPolylinePath start index count = " << pnt_indices.size());
+
   heat_msgs::PolylineSmoother::Request smooth_req;
   heat_msgs::PolylineSmoother::Response smooth_res;
   smooth_req.surface_mesh = *mesh_;
   for(int i=0; i<pnt_indices.size(); i++)
-    {
-      smooth_req.source_indices.push_back(pnt_indices[i]);
-    }
+  {
+    smooth_req.source_indices.push_back(pnt_indices[i]);
+  }
   if(pnt_indices.size() == 0)
-    {
-      emit QWarningBox("No path points selected, using raster angle instead");
-    }
+  {
+    emit QWarningBox("No path points selected, using raster angle instead");
+  }
   smooth_req.pt_spacing = ui_->double_spin_box_point_spacing->value();;
 
   polyline_smooth_client_.call(smooth_req, smooth_res);
-  ROS_ERROR_STREAM("onPolylinePath after smooth client call index size = " << smooth_res.output_poses.poses.size());
-
 
   actionlib::SimpleClientGoalState state = actionlib::SimpleClientGoalState::SUCCEEDED;
   heat_msgs::GenerateHeatToolPathsResult goal_;
@@ -226,12 +223,10 @@ void ToolPathParametersEditorWidget::onPolylinePath(const std::vector<int> pnt_i
   progress_dialog_->setLabelText("Heat Path Planning Progress");
   progress_dialog_->setMinimum(0);
   progress_dialog_->setMaximum(100);
-
   progress_dialog_->setValue(progress_dialog_->minimum());
   progress_dialog_->show();
-  ToolPathParametersEditorWidget::onGenerateHeatToolPathsComplete(state, goal);
 
-//  onPolylinePathComplete(smooth_res);
+  ToolPathParametersEditorWidget::onGenerateHeatToolPathsComplete(state, goal);
 }
 
 
@@ -343,14 +338,12 @@ void ToolPathParametersEditorWidget::onGenerateHeatToolPathsComplete(
     const actionlib::SimpleClientGoalState& state,
     const heat_msgs::GenerateHeatToolPathsResultConstPtr& res)
 {
-  ROS_ERROR("ToolPathParametersEditorWidget::onGenerateHeatToolPathsComplete");
   for (int i = progress_dialog_->minimum(); i < progress_dialog_->maximum(); ++i)
   {
     progress_dialog_->setValue(i);
     ros::Duration(0.01).sleep();
   }
   progress_dialog_->hide();
-  ROS_ERROR("END PROCESS_DIALOG");
   if (state != actionlib::SimpleClientGoalState::SUCCEEDED)
   {
     std::string message = "Action '" + GENERATE_HEAT_TOOLPATHS_ACTION + "' failed to succeed";
@@ -397,66 +390,6 @@ void ToolPathParametersEditorWidget::onGenerateHeatToolPathsComplete(
     }
   }
 }
-
-void ToolPathParametersEditorWidget::onPolylinePathComplete(const heat_msgs::PolylineSmoother::Response& res)
-{
-  ROS_ERROR("ONPOLYLINECOMPLETE");
-//  for (int i = progress_dialog_->minimum(); i < progress_dialog_->maximum(); ++i)
-//  {
-//    progress_dialog_->setValue(i);
-//    ros::Duration(0.01).sleep();
-//  }
-//  progress_dialog_->hide();
-
-//  if (state != actionlib::SimpleClientGoalState::SUCCEEDED)
-//  {
-//    std::string message = "Action '" + GENERATE_HEAT_TOOLPATHS_ACTION + "' failed to succeed";
-//    emit QWarningBox(message);
-//  }
-//  else
-//  {
-//    if (!res->success || !res->tool_path_validities[0])
-//    {
-//      emit QWarningBox(std::string("Heat tool path generation failed"));
-//    }
-//    else
-//    {
-      ROS_INFO_STREAM("Successfully generated heat tool path");
-
-      opp_msgs::ToolPath tp;
-      tp.header.stamp = ros::Time::now();
-      tp.process_type.val = qvariant_cast<opp_msgs::ProcessType::_val_type>(ui_->combo_box_process_type->currentData());
-      std::vector<geometry_msgs::PoseArray> paths;
-      paths.push_back(res.output_poses);
-      tp.paths = paths;
-      tp.params.config.pt_spacing = ui_->double_spin_box_point_spacing->value();
-      tp.params.config.tool_offset = ui_->double_spin_box_tool_z_offset->value();
-      tp.params.config.line_spacing = ui_->double_spin_box_line_spacing->value();
-      tp.params.config.raster_angle = ui_->double_spin_box_raster_angle->value() * M_PI / 180.0;
-      tp.params.config.min_hole_size = ui_->double_spin_box_min_hole_size->value();
-      tp.params.config.min_segment_size = ui_->double_spin_box_min_segment_length->value();
-      tp.params.config.generate_extra_rasters = false;  // No option to set this from GUI at present.
-      tp.params.config.raster_wrt_global_axes = false;  // No option to set this from GUI at present.
-      tp.params.config.intersecting_plane_height = ui_->double_spin_box_intersecting_plane_height->value();
-
-      // Create the tool path offset transform
-      // 1. Add z offset
-      // 2. Rotate 180 degrees about X
-      Eigen::Isometry3d tool_offset = Eigen::Isometry3d::Identity();
-      tool_offset.rotate(
-          Eigen::AngleAxisd(ui_->double_spin_box_tool_pitch->value() * M_PI / 180.0, Eigen::Vector3d::UnitY()));
-      tool_offset.translate(Eigen::Vector3d(0.0, 0.0, ui_->double_spin_box_tool_z_offset->value()));
-      tool_offset.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitX()));
-      tf::poseEigenToMsg(tool_offset, tp.tool_offset);
-
-      // Save the toolpath
-      tool_path_.reset(new opp_msgs::ToolPath(tp));
-
-      emit dataChanged();
-//    }
-//  }
-}
-
 
 void ToolPathParametersEditorWidget::updateProcessType(const QString&)
 {

@@ -110,8 +110,6 @@ private:
   void onGenerateHeatToolPathsComplete(const actionlib::SimpleClientGoalState& state,
 				       const heat_msgs::GenerateHeatToolPathsResultConstPtr& res);
 
-  void onPolylinePathComplete(const heat_msgs::PolylineSmoother::Response& res);
-
   void onQWarningBox(std::string warn_string);
 
   actionlib::SimpleActionClient<noether_msgs::GenerateToolPathsAction> client_;
