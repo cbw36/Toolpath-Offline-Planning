@@ -35,6 +35,7 @@
   <depend>opp_database</depend>
   <depend>rviz</depend>
   <depend>shape_msgs</depend>
+  <depend>smooth_pose_traj</depend>
   <depend>std_srvs</depend>
   <depend>visualization_msgs</depend>
 

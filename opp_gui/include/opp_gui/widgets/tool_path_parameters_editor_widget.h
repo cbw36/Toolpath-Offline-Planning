@@ -23,6 +23,7 @@
 #include <noether_msgs/GenerateToolPathsAction.h>
 #include <heat_msgs/GenerateHeatToolPathsAction.h>
 #include <heat_msgs/HeatToolPathConfig.h>
+#include <heat_msgs/PolylineSmoother.h>
 #include <ros/ros.h>
 
 #include <opp_msgs/ToolPath.h>
@@ -109,10 +110,13 @@ private:
   void onGenerateHeatToolPathsComplete(const actionlib::SimpleClientGoalState& state,
 				       const heat_msgs::GenerateHeatToolPathsResultConstPtr& res);
 
+  void onPolylinePathComplete(const heat_msgs::PolylineSmoother::Response& res);
+
   void onQWarningBox(std::string warn_string);
 
   actionlib::SimpleActionClient<noether_msgs::GenerateToolPathsAction> client_;
   actionlib::SimpleActionClient<heat_msgs::GenerateHeatToolPathsAction> heat_client_;
+  ros::ServiceClient polyline_smooth_client_;
 
   Ui::ToolPathParametersEditor* ui_;
 

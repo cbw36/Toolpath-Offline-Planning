@@ -19,6 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
   opp_database
   rviz
   shape_msgs
+#  smooth_pose_traj
   std_srvs
   visualization_msgs
 )
@@ -55,6 +56,7 @@ catkin_package(
     opp_database
     rviz
     shape_msgs
+    smooth_pose_traj
     std_srvs
     visualization_msgs
   DEPENDS
