@@ -5,3 +5,7 @@
 
 # RViz Tool Cursor
 - git: {local-name: rviz_tool_cursor, uri: 'https://github.com/marip8/rviz_tool_cursor.git', version: master}
+
+# Heat_raster
+- git: {local-name: heat_raster, uri: 'https://github.com/cbw36/heat_raster.git', version: pointclouds}
+
